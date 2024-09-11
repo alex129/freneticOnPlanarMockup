@@ -10,7 +10,14 @@ const numParallels = ref('');
 const numLayers = ref('');
 const distanceToEdge = ref('');
 
+const generalResults = ref({
+  Ptol: '',
+  numPCBLayers: '',
+  pcbThickness: '',
+});
+
 const isLoading = ref(false);
+const showWarning = ref(false);
 
 const runSimulation = () => {
   console.log('Running simulation with the following values:');
@@ -29,6 +36,16 @@ const showLoader = () => {
   setTimeout(() => {
     isLoading.value = false;
   }, 2000);
+};
+
+const analize = () => {
+  showLoader();
+  showWarning.value = true;
+  generalResults.value = {
+    Ptol: '24',
+    numPCBLayers: '4',
+    pcbThickness: '1.6',
+  };
 };
 </script>
 
@@ -139,7 +156,7 @@ const showLoader = () => {
             <div v-if="isLoading" class="flex items-center justify-center h-full">
               <Loader />
             </div>
-            <img v-else class="h-full w-full" src="/planar_img.png" alt="Planar img" />
+            <img v-else class="h-full" src="/planar_img.png" alt="Planar img" />
           </div>
 
           <div class="flex items-center justify-center gap-2">
@@ -156,21 +173,22 @@ const showLoader = () => {
       <div class="grid grid-cols-2 gap-4 w-full">
         <div class="bg-white p-4 border rounded">
           <h3 class="font-semibold mb-2">Primary Results</h3>
-          <p>Current density (A/mm²) =</p>
-          <p>Rdc (mOhms) =</p>
-          <p>Pprimary (W) =</p>
+          <p>Current density (A/mm²) = 6.5</p>
+          <p>Rdc (mOhms) = 10.5</p>
+          <p>Pprimary (W) = 13</p>
         </div>
         <div class="bg-white p-4 border rounded">
           <h3 class="font-semibold mb-2">General Results</h3>
-          <p>Ptol (W) =</p>
-          <p>N° PCB Layers =</p>
-          <p>PCB Thickness (mm) =</p>
+          <p>Ptol (W) = {{ generalResults.Ptol }}</p>
+          <p>N° PCB Layers = {{ generalResults.numPCBLayers }}</p>
+          <p>PCB Thickness (mm) = {{ generalResults.pcbThickness }}</p>
         </div>
       </div>
 
+      <div v-if="showWarning" class="w-full bg-yellow-100 p-2 flex items-center text-sm"> <img src="warning_icon.png" alt="warning icon" class="w-6" >Only conduction losses are considered in this first versión of the planar Transformers. We are not including fringing field and proximity losses. Please be careful with the design and try to oversize the winding.</div>
       <div class="flex justify-end space-x-4 mt-4">
         <button class="py-2 px-6 bg-gray-200 rounded">SUGGEST PCB</button>
-        <button class="py-2 px-6 bg-blue-600 text-white rounded">RUN</button>
+        <button class="py-2 px-6 bg-blue-600 text-white rounded" @click="analize">RUN</button>
       </div>
     </main>
   </div>
