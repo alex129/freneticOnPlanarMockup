@@ -38,9 +38,9 @@ const runSimulation = () => {
 };
 
 const showLoader = () => {
-  showDraw.value = true;
   isLoading.value = true;
   setTimeout(() => {
+    showDraw.value = true;
     isLoading.value = false;
   }, 2000);
 };
