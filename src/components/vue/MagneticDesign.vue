@@ -99,11 +99,11 @@ const analize = () => {
         </button>
       </div>
 
-      <div class="flex items-center space-x-4">
+      <div class="flex items-start gap-2">
         <select class="py-2 px-4 border rounded">
           <option>Planar</option>
         </select>
-        
+
         <select class="py-2 px-4 border rounded">
           <option>Interleaved</option>
           <option>No Interleaved</option>
