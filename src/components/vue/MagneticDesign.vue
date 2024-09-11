@@ -217,7 +217,7 @@ const analize = () => {
       <div v-if="showWarning" class="w-full bg-yellow-100 p-2 flex items-center text-sm"> <img src="warning_icon.png" alt="warning icon" class="w-6" >Only conduction losses are considered in this first versión of the planar Transformers. We are not including fringing field and proximity losses. Please be careful with the design and try to oversize the winding.</div>
       <div class="flex justify-end space-x-4 mt-4">
         <button class="py-2 px-6 bg-gray-200 rounded">SUGGEST PCB</button>
-        <button class="py-2 px-6 bg-blue-600 text-white rounded" @click="analize">RUN</button>
+        <button class="py-2 px-6 rounded" :class="isPrimaryFilled ? 'bg-blue-600 text-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'"  :disabled="!isPrimaryFilled" @click="analize">RUN</button>
       </div>
     </main>
   </div>
