@@ -54,12 +54,9 @@ import AdvandedCustomization from "./AdvancedCustomization.vue";
       <div class="flex items-center space-x-4">
         <select class="py-2 px-4 border rounded">
           <option>Interleaved</option>
+          <option>No Interleaved</option>
         </select>
-        <button class="bg-gray-200 py-2 px-4 rounded">Download CSV</button>
-        <div class="flex items-center space-x-2">
-          <span>Use only materials in stock</span>
-          <input type="checkbox" class="form-checkbox" />
-        </div>
+        <button class="bg-gray-200 py-2 px-4 rounded">Download JSON</button>
       </div>
 
       <!-- Layout and Content Sections -->
@@ -110,9 +107,6 @@ import AdvandedCustomization from "./AdvancedCustomization.vue";
               class="w-full py-2 px-4 border rounded"
             />
           </div>
-          <select class="mt-4 py-2 px-4 border rounded w-full">
-            <option>Symmetrical</option>
-          </select>
         </div>
 
         <!-- Right Side -->
