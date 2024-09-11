@@ -207,7 +207,7 @@ const analize = () => {
           <div v-else>
             <h3 class="font-semibold mb-2">General Results</h3>
             <p>Ptotal (W) = {{ generalResults.Ptol }}</p>
-            <p>Winding temperature (Cº) = {{ generalResults.windingTemperature }}</p>
+            <p>Winding temperature (ºC) = {{ generalResults.windingTemperature }}</p>
             <p>N° PCB Layers = {{ generalResults.numPCBLayers }}</p>
             <p>PCB Thickness (mm) = {{ generalResults.pcbThickness }}</p>
           </div>
