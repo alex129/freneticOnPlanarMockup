@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
+interface Props {
+  disabled?: boolean;
+}
+
+const { disabled = false } = defineProps<Props>();
 const isModalOpen = ref(false);
 const emit = defineEmits(["save"]);
 
@@ -142,7 +147,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <button @click="openModal" class="px-4 py-2 bg-blue-600 text-white rounded">
+    <button @click="openModal" 
+              class="px-4 py-2 rounded"
+              :class="!disabled ? 'bg-blue-600 text-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'"
+              :disabled="disabled">
       Advanced Customization
     </button>
 

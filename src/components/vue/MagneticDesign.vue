@@ -52,7 +52,7 @@ const analize = () => {
   generalResults.value = {
     Ptol: '24',
     windingTemperature: "105",
-    numPCBLayers: '4',
+    numPCBLayers: '3',
     pcbThickness: '1.6',
   };
   setTimeout(() => {
@@ -184,7 +184,7 @@ const analize = () => {
             >
               Preview
             </button>
-            <AdvandedCustomization @save="showLoader"/>
+            <AdvandedCustomization @save="showLoader" :disabled="!showDraw"/>
           </div>
           <div class="flex items-center mt-4">
             <input type="checkbox" class="form-checkbox" />
