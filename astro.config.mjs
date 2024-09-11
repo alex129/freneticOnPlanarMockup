@@ -11,5 +11,19 @@ import vercel from '@astrojs/vercel/serverless';
 export default defineConfig({
   integrations: [vue(), tailwind()],
   output: 'server',
-  adapter: vercel()
+  adapter: vercel(),
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'monaco-editor': ['monaco-editor'],
+          },
+        },
+      },
+    },
+    optimizeDeps: {
+      include: ['monaco-editor'],
+    },
+  },
 });

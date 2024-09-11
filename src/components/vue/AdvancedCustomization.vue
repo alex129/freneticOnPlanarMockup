@@ -12,16 +12,12 @@
       class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
       <div
-        class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto"
+        class="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl max-h-full overflow-y-auto"
       >
         <h2 class="text-xl font-semibold mb-4">Advanced Customization</h2>
-        
-        <!-- Área de texto para JSON -->
-        <textarea
-          v-model="jsonText"
-          class="w-full h-64 p-2 border rounded"
-          @input="updateJson"
-        ></textarea>
+
+        <!-- Editor de JSON usando Monaco Editor -->
+        <div ref="editorContainer" class="border rounded h-[600px]"></div>
         
         <!-- Botones de Acción -->
         <div class="flex justify-end mt-4">
@@ -46,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 // Estado del modal
 const isModalOpen = ref(false);
@@ -121,12 +117,33 @@ const formData = ref({
   ],
 });
 
-// Conversión de los datos a formato JSON
-const jsonText = ref(JSON.stringify(formData.value, null, 2));
+// Editor de Monaco
+const editorContainer = ref(null);
+let editorInstance;
+
+// Función para cargar Monaco Editor dinámicamente
+const loadMonacoEditor = async () => {
+  const monaco = await import("monaco-editor");
+  return monaco;
+};
+
+// Función para inicializar el editor
+const initializeEditor = async () => {
+  const monaco = await loadMonacoEditor();
+  if (editorContainer.value) {
+    editorInstance = monaco.editor.create(editorContainer.value, {
+      value: JSON.stringify(formData.value, null, 2),
+      language: "json",
+      theme: "vs-dark",
+      automaticLayout: true,
+    });
+  }
+};
 
 // Función para abrir el modal
 const openModal = () => {
   isModalOpen.value = true;
+  initializeEditor();
 };
 
 // Función para cerrar el modal
@@ -134,25 +151,29 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 
-// Actualizar los datos al modificar el texto
-const updateJson = () => {
-  try {
-    formData.value = JSON.parse(jsonText.value);
-  } catch (e) {
-    console.error("Invalid JSON format");
-  }
-};
-
 // Guardar el JSON
 const saveJson = () => {
   try {
-    formData.value = JSON.parse(jsonText.value);
+    const jsonText = editorInstance.getValue();
+    formData.value = JSON.parse(jsonText);
     console.log("Updated data:", formData.value);
     closeModal();
   } catch (e) {
     alert("Invalid JSON format. Please correct it and try again.");
   }
 };
+
+onMounted(() => {
+  if (isModalOpen.value) {
+    initializeEditor();
+  }
+});
+
+onBeforeUnmount(() => {
+  if (editorInstance) {
+    editorInstance.dispose();
+  }
+});
 </script>
 
 <style scoped>

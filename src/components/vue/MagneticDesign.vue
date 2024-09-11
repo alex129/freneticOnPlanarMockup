@@ -60,9 +60,9 @@ import AdvandedCustomization from "./AdvancedCustomization.vue";
       </div>
 
       <!-- Layout and Content Sections -->
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-3 gap-4">
         <!-- Left Side -->
-        <div class="bg-blue-50 p-4 rounded">
+        <div class="bg-blue-50 p-4 rounded col-span-1">
           <div class="flex space-x-4 mb-4">
             <button
               class="text-sm font-semibold py-2 px-4 bg-white border rounded"
@@ -110,7 +110,7 @@ import AdvandedCustomization from "./AdvancedCustomization.vue";
         </div>
 
         <!-- Right Side -->
-        <div class="bg-gray-100 p-4 rounded">
+        <div class="bg-gray-100 p-4 rounded col-span-2">
           <!-- Simulated layer structure, could be an image or placeholder content -->
           <div
             class="bg-gray-300 h-100 rounded mb-4 flex items-center justify-center"
@@ -127,7 +127,7 @@ import AdvandedCustomization from "./AdvancedCustomization.vue";
       </div>
 
       <!-- Results -->
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-2 gap-4 w-full">
         <div class="bg-white p-4 border rounded">
           <h3 class="font-semibold mb-2">Primary Results</h3>
           <p>Current density (A/mm²) =</p>
