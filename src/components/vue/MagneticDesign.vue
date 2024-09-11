@@ -89,7 +89,7 @@ const analize = () => {
         <button
           class="text-sm font-semibold py-2 px-4 bg-blue-600 text-white rounded-full"
         >
-          Planar Winding
+          Winding
         </button>
         <button class="text-sm font-semibold py-2 px-4 border rounded-full">
           Mechanical
@@ -103,6 +103,10 @@ const analize = () => {
         <select class="py-2 px-4 border rounded">
           <option>Interleaved</option>
           <option>No Interleaved</option>
+        </select>
+
+        <select class="py-2 px-4 border rounded">
+          <option>Plannar</option>
         </select>
       </div>
 
