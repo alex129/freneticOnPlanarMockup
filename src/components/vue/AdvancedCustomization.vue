@@ -1,53 +1,8 @@
-<template>
-  <div class="flex items-center justify-center gap-2">
-    <button class="px-4 py-2 bg-blue-600 text-white rounded">Preview</button>
-    <!-- Botón para abrir el modal -->
-    <button @click="openModal" class="px-4 py-2 bg-blue-600 text-white rounded">
-      Advanced Customization
-    </button>
-
-    <!-- Modal -->
-    <div
-      v-if="isModalOpen"
-      class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75"
-    >
-      <div
-        class="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl max-h-full overflow-y-auto"
-      >
-        <h2 class="text-xl font-semibold mb-4">Advanced Customization</h2>
-
-        <!-- Editor de JSON usando Monaco Editor -->
-        <div ref="editorContainer" class="border rounded h-[600px]"></div>
-        
-        <!-- Botones de Acción -->
-        <div class="flex justify-end mt-4">
-          <button
-            @click="saveJson"
-            type="button"
-            class="px-4 py-2 bg-green-600 text-white rounded mr-2"
-          >
-            Save
-          </button>
-          <button
-            @click="closeModal"
-            type="button"
-            class="px-4 py-2 bg-red-600 text-white rounded"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
-// Estado del modal
 const isModalOpen = ref(false);
 
-// Datos del formulario en formato JSON
 const formData = ref({
   window_height: 2.0e-3 * 1000,
   window_width: 9.0e-3 * 1000,
@@ -117,17 +72,14 @@ const formData = ref({
   ],
 });
 
-// Editor de Monaco
 const editorContainer = ref(null);
 let editorInstance;
 
-// Función para cargar Monaco Editor dinámicamente
 const loadMonacoEditor = async () => {
   const monaco = await import("monaco-editor");
   return monaco;
 };
 
-// Función para inicializar el editor
 const initializeEditor = async () => {
   const monaco = await loadMonacoEditor();
   if (editorContainer.value) {
@@ -140,18 +92,15 @@ const initializeEditor = async () => {
   }
 };
 
-// Función para abrir el modal
 const openModal = () => {
   isModalOpen.value = true;
   initializeEditor();
 };
 
-// Función para cerrar el modal
 const closeModal = () => {
   isModalOpen.value = false;
 };
 
-// Guardar el JSON
 const saveJson = () => {
   try {
     const jsonText = editorInstance.getValue();
@@ -160,6 +109,21 @@ const saveJson = () => {
     closeModal();
   } catch (e) {
     alert("Invalid JSON format. Please correct it and try again.");
+  }
+};
+
+const downloadJson = () => {
+  try {
+    const jsonText = editorInstance.getValue();
+    const blob = new Blob([jsonText], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "customization.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert("Error downloading JSON. Please try again.");
   }
 };
 
@@ -176,8 +140,45 @@ onBeforeUnmount(() => {
 });
 </script>
 
+<template>
+    <button @click="openModal" class="px-4 py-2 bg-blue-600 text-white rounded">
+      Advanced Customization
+    </button>
+
+    <div
+      v-if="isModalOpen"
+      class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75"
+    >
+      <div
+        class="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl max-h-full overflow-y-auto"
+      >
+        <h2 class="text-xl font-semibold mb-4">Advanced Customization</h2>
+
+        <div ref="editorContainer" class="border rounded h-[600px]"></div>
+        
+        <div class="flex justify-end mt-4 gap-2">
+          <button
+            @click="saveJson"
+            type="button"
+            class="px-4 py-2 bg-green-600 text-white rounded"
+          >
+            Save
+          </button>
+          <button class="bg-gray-200 py-2 px-4 rounded" @click="downloadJson">Download</button>
+          <button
+            @click="closeModal"
+            type="button"
+            class="px-4 py-2 bg-red-600 text-white rounded"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+</template>
+
 <style scoped>
-/* Estilos personalizados */
 .modal-content {
   max-height: 80vh;
   overflow-y: auto;
