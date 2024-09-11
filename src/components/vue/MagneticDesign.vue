@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import AdvandedCustomization from "./AdvancedCustomization.vue";
 import Loader from "./Loader.vue";
 
@@ -12,6 +12,7 @@ const distanceToEdge = ref('');
 
 const generalResults = ref({
   Ptol: '',
+  windingTemperature: '',
   numPCBLayers: '',
   pcbThickness: '',
 });
@@ -19,9 +20,13 @@ const generalResults = ref({
 const isLoading = ref(false);
 const isAnalyzing = ref(false);
 const showWarning = ref(false);
+const showDraw = ref(false);
+
+const isPrimaryFilled = computed(() => {
+  return traceWidth.value !== '' && cuThickness.value !== '' && totalTurns.value !== '' && numParallels.value !== '' && numLayers.value !== '' && distanceToEdge.value !== '';
+});
 
 const runSimulation = () => {
-  console.log('Running simulation with the following values:');
   console.log({
     traceWidth: traceWidth.value,
     cuThickness: cuThickness.value,
@@ -33,6 +38,7 @@ const runSimulation = () => {
 };
 
 const showLoader = () => {
+  showDraw.value = true;
   isLoading.value = true;
   setTimeout(() => {
     isLoading.value = false;
@@ -45,6 +51,7 @@ const analize = () => {
   showWarning.value = true;
   generalResults.value = {
     Ptol: '24',
+    windingTemperature: "105",
     numPCBLayers: '4',
     pcbThickness: '1.6',
   };
@@ -165,12 +172,19 @@ const analize = () => {
             <div v-if="isLoading" class="flex items-center justify-center h-full">
               <Loader />
             </div>
-            <img v-else class="h-full" src="/planar_img.png" alt="Planar img" />
+            <img v-else-if="showDraw" class="h-full" src="/planar_img.png" alt="Planar img" />
           </div>
 
           <div class="flex items-center justify-center gap-2">
-            <button class="px-4 py-2 bg-blue-600 text-white rounded" @click="showLoader">Preview</button>
-            <AdvandedCustomization />
+            <button 
+              class="px-4 py-2 rounded"
+              :class="isPrimaryFilled ? 'bg-blue-600 text-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'" 
+              @click="showLoader" 
+              :disabled="!isPrimaryFilled"
+            >
+              Preview
+            </button>
+            <AdvandedCustomization @save="showLoader"/>
           </div>
           <div class="flex items-center mt-4">
             <input type="checkbox" class="form-checkbox" />
@@ -192,7 +206,8 @@ const analize = () => {
           </div>
           <div v-else>
             <h3 class="font-semibold mb-2">General Results</h3>
-            <p>Ptol (W) = {{ generalResults.Ptol }}</p>
+            <p>Ptotal (W) = {{ generalResults.Ptol }}</p>
+            <p>Winding temperature (Cº) = {{ generalResults.windingTemperature }}</p>
             <p>N° PCB Layers = {{ generalResults.numPCBLayers }}</p>
             <p>PCB Thickness (mm) = {{ generalResults.pcbThickness }}</p>
           </div>

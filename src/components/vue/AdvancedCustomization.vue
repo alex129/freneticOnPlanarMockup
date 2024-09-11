@@ -2,6 +2,7 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const isModalOpen = ref(false);
+const emit = defineEmits(["save"]);
 
 const formData = ref({
   window_height: 2.0e-3 * 1000,
@@ -105,7 +106,7 @@ const saveJson = () => {
   try {
     const jsonText = editorInstance.getValue();
     formData.value = JSON.parse(jsonText);
-    console.log("Updated data:", formData.value);
+    emit('save');
     closeModal();
   } catch (e) {
     alert("Invalid JSON format. Please correct it and try again.");
