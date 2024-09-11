@@ -17,6 +17,7 @@ const generalResults = ref({
 });
 
 const isLoading = ref(false);
+const isAnalyzing = ref(false);
 const showWarning = ref(false);
 
 const runSimulation = () => {
@@ -39,6 +40,7 @@ const showLoader = () => {
 };
 
 const analize = () => {
+  isAnalyzing.value = true;
   showLoader();
   showWarning.value = true;
   generalResults.value = {
@@ -46,6 +48,9 @@ const analize = () => {
     numPCBLayers: '4',
     pcbThickness: '1.6',
   };
+  setTimeout(() => {
+    isAnalyzing.value = false;
+  }, 3000);
 };
 </script>
 
@@ -178,10 +183,15 @@ const analize = () => {
           <p>Pprimary (W) = 13</p>
         </div>
         <div class="bg-white p-4 border rounded">
-          <h3 class="font-semibold mb-2">General Results</h3>
-          <p>Ptol (W) = {{ generalResults.Ptol }}</p>
-          <p>N° PCB Layers = {{ generalResults.numPCBLayers }}</p>
-          <p>PCB Thickness (mm) = {{ generalResults.pcbThickness }}</p>
+          <div v-if="isAnalyzing" class="flex items-center justify-center h-full">
+            <Loader />
+          </div>
+          <div v-else>
+            <h3 class="font-semibold mb-2">General Results</h3>
+            <p>Ptol (W) = {{ generalResults.Ptol }}</p>
+            <p>N° PCB Layers = {{ generalResults.numPCBLayers }}</p>
+            <p>PCB Thickness (mm) = {{ generalResults.pcbThickness }}</p>
+          </div>
         </div>
       </div>
 
